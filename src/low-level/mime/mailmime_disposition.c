@@ -436,8 +436,10 @@ mailmime_filename_parm_parse(const char * message, size_t length,
 
   cur_token = * indx;
 
-  r = mailimf_token_case_insensitive_parse(message, length,
-					   &cur_token, "filename");
+  r = mailimf_token_case_insensitive_parse(message, length, &cur_token, "filename*");
+  if (r != MAILIMF_NO_ERROR)
+    r = mailimf_token_case_insensitive_parse(message, length, &cur_token, "filename");
+  
   if (r != MAILIMF_NO_ERROR)
     return r;
 
