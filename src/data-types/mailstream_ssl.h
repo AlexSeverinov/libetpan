@@ -45,7 +45,7 @@ extern "C" {
 
 /* socket */
 
-#if LIBETPAN_IOS_DISABLE_SSL
+#ifdef LIBETPAN_IOS_DISABLE_SSL
 #undef USE_SSL
 #endif
 
@@ -122,6 +122,10 @@ int mailstream_ssl_set_client_private_key_data(struct mailstream_ssl_context * s
 LIBETPAN_EXPORT
 int mailstream_ssl_set_server_certicate(struct mailstream_ssl_context * ssl_context, 
     char * CAfile, char * CApath);
+
+LIBETPAN_EXPORT
+int mailstream_ssl_set_server_name(struct mailstream_ssl_context * ssl_context,
+    char * hostname);
 
 LIBETPAN_EXPORT
 void * mailstream_ssl_get_openssl_ssl_ctx(struct mailstream_ssl_context * ssl_context);

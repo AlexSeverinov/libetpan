@@ -135,7 +135,7 @@ mailimap_sort(mailimap * session, const char * charset,
   session->imap_response_info->rsp_extension_list = NULL;
   
   if (sort_result == NULL) {
-    return MAILIMAP_ERROR_EXTENSION;
+    sort_result = clist_new();
   }
   
   error_code = response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_type;
@@ -213,7 +213,7 @@ mailimap_uid_sort(mailimap * session, const char * charset,
   session->imap_response_info->rsp_extension_list = NULL;
   
   if (sort_result == NULL) {
-    return MAILIMAP_ERROR_EXTENSION;
+    sort_result = clist_new();
   }
   
   error_code = response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_type;
@@ -340,11 +340,10 @@ int mailimap_sort_key_send(mailstream * fd,
       return mailimap_token_send(fd, "TO");
       
     case MAILIMAP_SORT_KEY_MULTIPLE:
-      r = mailimap_struct_spaced_list_send(fd, key->sortk_multiple,
+      return mailimap_struct_spaced_list_send(fd, key->sortk_multiple,
                                            (mailimap_struct_sender *)
                                            mailimap_sort_key_send);
       
-      return MAILIMAP_NO_ERROR;
     default:
       /* should not happend */
       return MAILIMAP_ERROR_INVAL;
@@ -449,3 +448,8 @@ mailimap_sort_extension_data_free(struct mailimap_extension_data * ext_data)
   free(ext_data);
 }
 
+LIBETPAN_EXPORT
+int mailimap_has_sort(mailimap * session)
+{
+  return mailimap_has_extension(session, "SORT");
+}
